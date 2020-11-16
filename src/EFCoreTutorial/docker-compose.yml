@@ -1,0 +1,38 @@
+version: '3.4'
+
+volumes:
+  db_volume: {}
+
+networks:
+  demoefcore-dev:
+    driver: bridge
+
+services:
+  efcoretutorial.lesson_01:
+    image: efcoretutorial:latest
+    depends_on:
+      - postgres_database
+    build:
+      context: .
+      dockerfile: EFCoreTutorial.Lesson_01/Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+        DB_CONNECTION_STRING: "host=postgres_database;port=5432;username=leujo;password=P@ssw0rd;database=DemoDB"
+    networks:
+      - demoefcore-dev
+
+  postgres_database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+      - ./db_scripts/initial.sql :/docker-entrypoint-initdb.d/initial.sql
+    environment:
+        POSTGRES_USER: "leujo"
+        POSTGRES_PASSWORD: "P@ssw0rd"
+        POSTGRES_DB: "DemoDB"
+    networks:
+      - demoefcore-dev

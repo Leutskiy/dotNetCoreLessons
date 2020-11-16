@@ -1,0 +1,62 @@
+﻿# ASPNETCore
+https://medium.com/front-end-weekly/net-core-web-api-with-docker-compose-postgresql-and-ef-core-21f47351224f
+
+# Console
+https://stackoverflow.com/questions/10744305/how-to-create-a-gitignore-file
+
+# CLI
+https://www.skylinetechnologies.com/Blog/Skyline-Blog/February_2018/how-to-use-dot-net-core-cli-create-multi-project
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-3.1&tabs=visual-studio#scaffold-a-controller
+
+# EFCore
+https://www.entityframeworktutorial.net/efcore/one-to-one-conventions-entity-framework-core.aspx
+https://docs.microsoft.com/en-us/ef/core/cli/dotnet
+https://www.learnentityframeworkcore.com/configuration/fluent-api
+https://docs.microsoft.com/ru-ru/ef/core/get-started/overview/first-app?tabs=netcore-cli
+https://metanit.com/sharp/entityframeworkcore/2.4.php
+https://www.osp.ru/winitpro/2014/06/13041413
+https://coderlessons.com/tutorials/microsoft-technologies/izuchite-entity-framework/entity-framework-kratkoe-rukovodstvo
+https://habr.com/ru/post/443770/
+https://docs.microsoft.com/ru-ru/ef/core/modeling/inheritance
+https://metanit.com/sharp/entityframeworkcore/4.1.php
+https://metanit.com/sharp/entityframeworkcore/3.7.php
+https://docs.microsoft.com/ru-ru/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key
+
+# .NETCore
+https://itnext.io/net-core-is-sexy-building-a-web-api-cdb470cc8222
+https://metanit.com/sharp/tutorial/12.4.php
+https://habr.com/ru/company/jugru/blog/468611/
+https://habr.com/ru/post/459514/
+https://habr.com/ru/post/452094/
+
+# DDD
+https://emacsway.github.io/ru/domain-events-in-ddd/
+https://github.com/heynickc/awesome-ddd#sample-projects
+https://emacsway.github.io/ru/self-learning-for-software-engineer/#id24
+https://emacsway.github.io/ru/domain-events-in-ddd/
+https://emacsway.github.io/ru/self-learning-for-software-engineer/
+https://www.oreilly.com/library/view/what-is-domain-driven/9781492057802/
+
+# Design
+https://www.youtube.com/watch?v=fRroByqFe80
+https://www.youtube.com/watch?v=l7v9Ib6wEzg
+https://habr.com/ru/company/psb/blog/440172/
+http://sergeyteplyakov.blogspot.com/2012/12/vs-vs.html
+https://habr.com/ru/post/325478/
+https://jimmybogard.com/contoso-university-examples-with-cqrs-mediatr-automapper-and-more/
+https://blog.byndyu.ru/2014/07/command-and-query-responsibility.html
+https://blog.jonathanoliver.com/event-sourcing-and-snapshots/
+https://en.wikipedia.org/wiki/Side_effect_(computer_science)
+https://en.wikipedia.org/wiki/Eventual_consistency
+
+# Projects
+https://github.com/gregoryyoung/m-r
+https://github.com/gnschenker/cqrs-introduction
+https://github.com/Byndyusoft/ByndyuSoft.Dotnet.Infrastructure/tree/master/samples/aspnetmvc
+https://github.com/pjvds/ncqrs/blob/master/Framework/src/Ncqrs/Eventing/Event.cs
+https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp
+
+# GIT
+https://uleming.github.io/gitbook/4_%D0%98%D0%B3%D0%BD%D0%BE%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D1%84%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2.html
+https://www.infoq.com/articles/dotnet-core-template-engine/
+https://softchris.github.io/pages/dotnet-10-commands.html#_4-dotnet-run
