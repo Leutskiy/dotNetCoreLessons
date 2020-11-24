@@ -1,17 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace EFCoreTutorial.Lesson_01.Domain
 {
-    public class School
+	/// <summary>
+	/// Школа
+	/// </summary>
+	public sealed class School : DomainEntity
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+		public School(
+            string name,
+            string city,
+            string state) : this()
+		{
+			Name = name;
+			City = city;
+			State = state;
+		}
+        
+        private School() : base()
+		{
+            Teachers = new List<Teacher>();
+		}
 
-        public ICollection<Teacher> Teachers { get; set; }
+        public string Name { get; private set; }
+
+        public string City { get; private set; }
+
+        public string State { get; private set; }
+
+        public ICollection<Teacher> Teachers { get; private set; }
+
+        public void HireATeacher(Teacher teacher)
+		{
+            Teachers.Add(teacher);
+		}
     }
 }

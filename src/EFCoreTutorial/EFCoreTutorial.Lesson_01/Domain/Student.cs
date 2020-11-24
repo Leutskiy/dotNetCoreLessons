@@ -1,9 +1,30 @@
 ﻿namespace EFCoreTutorial.Lesson_01.Domain
 {
-	public class Student
+	/// <summary>
+	/// Студент
+	/// </summary>
+	public sealed class Student : DomainEntity
 	{
-		public int Id { get; set; }
-		public string Name { get; set; }
-		public Class Class { get; set; }
+		public Student(
+			string name,
+			Class @class) : this()
+		{
+			Name = name;
+			Class = @class;
+		}
+
+		private Student() : base()
+		{
+
+		}
+
+		public string Name { get; private set; }
+
+		public Class Class { get; private set; }
+
+		public void GoToAClass(Class @class)
+		{
+			Class = @class;
+		}
 	}
 }

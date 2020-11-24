@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  rabbitmqtutorial.mailer_1:
+    image: ${DOCKER_REGISTRY-}rabbitmqtutorialmailer1
+    build:
+      context: .
+      dockerfile: RabbitMQTutorial.Mailer_1/Dockerfile
+    depends_on:
+      - rabbitmqtutorial
+
+  rabbitmqtutorial:
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=LeuJo
+      - RABBITMQ_DEFAULT_PASS=P@ssw0rd
+    image: rabbitmq:3-management

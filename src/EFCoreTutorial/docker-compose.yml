@@ -1,38 +1,37 @@
 version: '3.4'
 
-volumes:
-  db_volume: {}
-
-networks:
-  demoefcore-dev:
-    driver: bridge
-
 services:
   efcoretutorial.lesson_01:
     image: efcoretutorial:latest
     depends_on:
-      - postgres_database
+      - postgres
     build:
       context: .
       dockerfile: EFCoreTutorial.Lesson_01/Dockerfile
     ports:
       - "8080:80"
     environment:
-        DB_CONNECTION_STRING: "host=postgres_database;port=5432;username=leujo;password=P@ssw0rd;database=DemoDB"
-    networks:
-      - demoefcore-dev
+        DB_CONNECTION_STRING: "host=postgres;port=5432;username=LeuJo;password=P@ssw0rd;database=DemoDB"
 
-  postgres_database:
-    image: postgres:latest
+  postgres:
+    image: postgres
+    restart: always
     ports:
       - "5432:5432"
-    restart: always
-    volumes:
-      - db_volume:/var/lib/postgresql/data
-      - ./db_scripts/initial.sql :/docker-entrypoint-initdb.d/initial.sql
     environment:
-        POSTGRES_USER: "leujo"
+        DATABASE_HOST: "127.0.0.1"
+        POSTGRES_USER: "LeuJo"
         POSTGRES_PASSWORD: "P@ssw0rd"
         POSTGRES_DB: "DemoDB"
-    networks:
-      - demoefcore-dev
+    volumes:
+      - ./docker_postgres_init.sql :/docker-entrypoint-initdb.d/docker_postgres_init.sql
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
+        PGADMIN_DEFAULT_PASSWORD: "superstar!89"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
