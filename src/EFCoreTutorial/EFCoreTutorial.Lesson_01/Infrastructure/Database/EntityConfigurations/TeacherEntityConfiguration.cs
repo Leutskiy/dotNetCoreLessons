@@ -14,11 +14,9 @@ namespace EFCoreTutorial.Lesson_01.Infrastructure.Database.EntityConfigurations
 			builder.ToTable(Table, Schema);
 
 			builder.HasKey(t => t.Id);
+			builder.Property(t => t.Id).ValueGeneratedNever();
 
 			builder.Property(t => t.Name);
-
-			builder.HasOne(t => t.School).WithMany(s => s.Teachers);
-			builder.HasMany(t => t.Classes).WithOne(c => c.Teacher);
 		}
 	}
 }

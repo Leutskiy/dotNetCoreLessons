@@ -14,11 +14,12 @@ namespace EFCoreTutorial.Lesson_01.Infrastructure.Database.EntityConfigurations
 			builder.ToTable(Table, Schema);
 
 			builder.HasKey(c => c.Id);
+			builder.Property(c => c.Id).ValueGeneratedNever();
 
 			builder.Property(c => c.Name);
 
-			builder.HasOne(c => c.Teacher).WithMany(t => t.Classes);
-			builder.HasMany(c => c.Students).WithOne(s => s.Class);
+			builder.HasOne<Teacher>().WithMany(c => c.Classes).HasForeignKey(c => c.TeacherId);
+
 		}
 	}
 }

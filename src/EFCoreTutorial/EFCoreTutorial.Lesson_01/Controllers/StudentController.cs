@@ -68,16 +68,23 @@ namespace EFCoreTutorial.Lesson_01.Controllers
         [HttpPost("test")]
         public void Test()
 		{
-            var teacher = new Teacher("Alice", new School("UFMSH", "Khanty-Mansiysk", "New"));
+            var teacher = new Teacher("Alice");
             _applicationContext.Teachers.Add(teacher);
 
+            //_applicationContext.Classes.AddRange(@class1, @class2);
+            //teacher.AddClass(@class1);
 
-            teacher.BindToClass(new Class("SuperClass"));
+            //teacher.AddClass(new Class("SuperClass", teacher.Id));
 
             _applicationContext.SaveChanges();
 
-            teacher.BindToClass(new Class("MegaClass"));
 
+            var @class1 = new Class("SuperClass", teacher.Id);
+            var @class2 = new Class("MegaClass", teacher.Id);
+            //teacher.AddClass(new Class("MegaClass", teacher.Id));
+
+            teacher.AddClass(@class1);
+            teacher.AddClass(@class2);
             _applicationContext.SaveChanges();
         }
     }

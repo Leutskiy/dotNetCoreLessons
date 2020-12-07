@@ -6,33 +6,35 @@ namespace EFCoreTutorial.Lesson_01.Domain
 	/// <summary>
 	/// Учитель
 	/// </summary>
-	public sealed class Teacher : DomainEntity
+	public sealed class Teacher : DomainEntity, IHasDomainEvents
 	{
+		private readonly ICollection<IDomainEvent> _domainEvents;
+
 		public Teacher(
-			string name,
-			School school) : this()
+			string name) : this()
 		{
 			Name = name;
-			School = school;
+			Classes.Add(new Class($"Start_Initial_{DateTime.Now}", Id));
 
-			school.HireATeacher(this);
+			_domainEvents.Add(new TeacherCreatedEvent(DateTime.Now, "leujo"));
 		}
 
 		private Teacher() : base()
 		{
 			Classes = new List<Class>();
+
+			_domainEvents = new List<IDomainEvent>();
 		}
 
 		public string Name { get; private set; }
 
-		public School School { get; private set; }
-
 		public ICollection<Class> Classes { get; private set; }
 
-		public void BindToClass(Class @class)
+        public ICollection<IDomainEvent> DomainEvents => _domainEvents;
+
+        public void AddClass(Class @class)
 		{
 			Classes.Add(@class);
-			@class.ChangeATeacher(this);
 		}
 	}
 }

@@ -21,16 +21,15 @@ namespace EFCoreTutorial.Lesson_01.Migrations
 
             modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Class", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -39,102 +38,27 @@ namespace EFCoreTutorial.Lesson_01.Migrations
                     b.ToTable("Classes", "lesson_01");
                 });
 
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.School", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<string>("City")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("State")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Schools", "lesson_01");
-                });
-
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.ToTable("Students", "lesson_01");
-                });
-
             modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Teacher", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("SchoolId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("Teachers", "lesson_01");
                 });
 
             modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Class", b =>
                 {
-                    b.HasOne("EFCoreTutorial.Lesson_01.Domain.Teacher", "Teacher")
+                    b.HasOne("EFCoreTutorial.Lesson_01.Domain.Teacher", null)
                         .WithMany("Classes")
-                        .HasForeignKey("TeacherId");
-
-                    b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Student", b =>
-                {
-                    b.HasOne("EFCoreTutorial.Lesson_01.Domain.Class", "Class")
-                        .WithMany("Students")
-                        .HasForeignKey("ClassId");
-
-                    b.Navigation("Class");
-                });
-
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Teacher", b =>
-                {
-                    b.HasOne("EFCoreTutorial.Lesson_01.Domain.School", "School")
-                        .WithMany("Teachers")
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Class", b =>
-                {
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.School", b =>
-                {
-                    b.Navigation("Teachers");
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EFCoreTutorial.Lesson_01.Domain.Teacher", b =>
