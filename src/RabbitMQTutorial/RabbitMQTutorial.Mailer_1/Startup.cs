@@ -1,36 +1,44 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RabbitMQTutorial.Mailer_1.Adapters;
 
 namespace RabbitMQTutorial.Mailer_1
 {
-    public class Startup
+    /// <summary>
+    /// Файл запуска сервиса
+    /// </summary>
+	public sealed class Startup
     {
+        /// <summary>
+        /// Конструктор с параметрами
+        /// </summary>
+        /// <param name="configuration">Конфигурация</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Конфигурация
+        /// </summary>
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddMediatR(typeof(Startup));
 
-            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+            services.AddRabbitMq(Configuration);
+            services.AddRabbitMqPriorityQueueForMessage();
 
             services.AddSwaggerGen(c =>
             {
@@ -49,6 +57,7 @@ namespace RabbitMQTutorial.Mailer_1
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
                 c.IncludeXmlComments(xmlPath);
             });
 
@@ -74,6 +83,7 @@ namespace RabbitMQTutorial.Mailer_1
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
