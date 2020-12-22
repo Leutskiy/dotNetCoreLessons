@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
 using RabbitMQTutorial.Mailer_1.Infrastructure;
@@ -30,6 +31,14 @@ namespace RabbitMQTutorial.Mailer_1.Adapters
         {
             services.AddSingleton<IProducer<PriorityIntegrationEvent<SendSmsNotification>>, SmsNotificationProducer>();
 
+            services.AddScoped<IHostedService, SmsNotificationConsumer>();
+
+            services.AddHostedService<SmsNotificationConsumer>();
+            services.AddHostedService<SmsNotificationConsumer>();
+            services.AddHostedService<SmsNotificationConsumer>();
+            services.AddHostedService<SmsNotificationConsumer>();
+            services.AddHostedService<SmsNotificationConsumer>();
+            services.AddHostedService<SmsNotificationConsumer>();
             services.AddHostedService<SmsNotificationConsumer>();
 
             return services;
