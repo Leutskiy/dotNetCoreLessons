@@ -7,7 +7,7 @@ namespace RabbitMQTutorial.Mailer_1.Features.SendSms
 	{
 		public sealed class CommandResult
 		{
-			public Guid[] NotificationIds { get; set; }
+			public Guid NotificationId { get; set; }
 
 			public bool IsSuccess { get; set; }
 		}
@@ -22,7 +22,7 @@ namespace RabbitMQTutorial.Mailer_1.Features.SendSms
 		// добавить возвращение рещультаты команды
 		public sealed class Command : IRequest<CommandResult>
 		{
-			public Notification[] Notifications { get; set; }
+			public Notification Notification { get; set; }
 		}
 	}
 }

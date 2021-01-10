@@ -15,13 +15,16 @@ namespace RabbitMQTutorial.Mailer_1.Adapters
 	/// </summary>
 	public abstract class RabbitMqClientBase
     {
-		/// <summary>
-		/// Констурктор с параметрами
-		/// </summary>
-		/// <param name="pooledChannelPolicy">Политика управления каналами в пуле</param>
-		/// <param name="options">Общии настройки подключения для publisher/consumer</param>
-		/// <param name="args"></param>
-		protected RabbitMqClientBase(
+        private const string RetryExchange = "fintechiq.retry.exchange";
+        private const string RetryQueue = "fintechiq.retry.queue";
+
+        /// <summary>
+        /// Констурктор с параметрами
+        /// </summary>
+        /// <param name="pooledChannelPolicy">Политика управления каналами в пуле</param>
+        /// <param name="options">Общии настройки подключения для publisher/consumer</param>
+        /// <param name="args"></param>
+        protected RabbitMqClientBase(
             IPooledObjectPolicy<IModel> pooledChannelPolicy,
             RabbitMqPubSubSettings options,
             (string key, object val)[]? args = default)
@@ -90,9 +93,10 @@ namespace RabbitMQTutorial.Mailer_1.Adapters
             if (args != null)
 			{
                 AddArguments(args);
+                Arguments.Add("x-dead-letter-exchange", RetryExchange);
+                Arguments.Add("x-dead-letter-routing-key", RetryQueue);
             }
                 
-
             var channel = ChannelPool.Get();
 
             try
@@ -100,6 +104,18 @@ namespace RabbitMQTutorial.Mailer_1.Adapters
                 channel.ExchangeDeclare(exchange: ExchangeName, type: Direct, durable: true, autoDelete: false);
                 channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false, arguments: Arguments);
                 channel.QueueBind(queue: QueueName, exchange: ExchangeName, routingKey: RouteKeyName);
+
+                channel.ExchangeDeclare(exchange: RetryExchange, type: Direct, durable: true, autoDelete: false);
+                channel.QueueDeclare
+                (
+                    queue: RetryQueue, durable: true, exclusive: false, autoDelete: false,
+                    arguments: new Dictionary<string, object> {
+                        { "x-dead-letter-exchange", ExchangeName },
+                        { "x-dead-letter-routing-key", RouteKeyName },
+                        { "x-message-ttl", 30000 }, // 30 секунд
+                    }
+                );
+                channel.QueueBind(RetryQueue, RetryExchange, RetryQueue);
             }
 			finally
 			{

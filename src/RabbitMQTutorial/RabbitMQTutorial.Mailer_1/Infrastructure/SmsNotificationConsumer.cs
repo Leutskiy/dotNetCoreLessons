@@ -7,7 +7,6 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQTutorial.Mailer_1.Adapters;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,10 +21,11 @@ namespace RabbitMQTutorial.Mailer_1.Infrastructure
 	/// </summary>
 	public sealed class SmsNotificationConsumer : RabbitMqConsumerBase<SendSmsCommand>, IHostedService
 	{
+		private static int _counter = 1;
+
+
 		private readonly static string XMaxPriorityKey = "x-max-priority";
 		private readonly static object XMaxPriorityVal = 3;
-
-		private readonly static List<SendSmsNotification> _commands = new List<SendSmsNotification>();
 
 		private readonly ILogger<SmsNotificationConsumer> _logger;
 
@@ -66,27 +66,40 @@ namespace RabbitMQTutorial.Mailer_1.Infrastructure
 				var body = UTF8.GetString(messageByteArray);
 				var message = JsonConvert.DeserializeObject<PriorityIntegrationEvent<SendSmsNotification>>(body);
 
+				_logger.LogInformation($"Priority: {message.Priority}");
 
-				if (_commands.Count >= 9)
+				var result = await Mediator.Send(new SendSmsCommand
 				{
-					var result = await Mediator.Send(new SendSmsCommand
-					{
-						Notifications = _commands.ToArray()
-					});
+					Notification = message.Data
+				});
 
-					_logger.LogInformation($"The command has returned the following ids: {string.Join(", ", result.NotificationIds)}");
-					channel.BasicAck(eventArgs.DeliveryTag, true);
-					_logger.LogInformation("The message is deleted from the messaging queue");
+				_logger.LogInformation($"The command has returned the following id: {result.NotificationId}");
 
-					_commands.Clear();
+
+				if (eventArgs.Redelivered)
+				{
+					_logger.LogInformation($"         ONLY REDELIVERED!!!            ");
+				}
+				
+
+
+				if ((_counter++) % 5 == 0)
+				{
+					throw new Exception("This is thrown the test exception");
 				}
 
-				_logger.LogInformation($"Priority: {message.Priority}");
-				_commands.Add(message.Data);
+				channel.BasicAck(eventArgs.DeliveryTag, false);
+
+				_logger.LogInformation("The message is deleted from the messaging queue");
+
+
 			}
 			catch (Exception ex)
 			{
 				_logger.LogCritical(ex, "Error while retrieving message from queue.");
+				var requeue = false;
+				channel.BasicNack(eventArgs.DeliveryTag, false, requeue);
+				_logger.LogInformation("The message goes back in queue");
 			}
 			finally
 			{
@@ -102,7 +115,7 @@ namespace RabbitMQTutorial.Mailer_1.Infrastructure
 
 			try
 			{
-				channel.BasicQos(0, 10, false);
+				channel.BasicQos(0, 1, false);
 				var consumer = new AsyncEventingBasicConsumer(channel);
 				consumer.Received += OnEventReceivedAsync;
 				channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);

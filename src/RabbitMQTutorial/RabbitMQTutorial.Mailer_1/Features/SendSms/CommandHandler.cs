@@ -20,18 +20,15 @@ namespace RabbitMQTutorial.Mailer_1.Features.SendSms
 
 			public async Task<CommandResult> Handle(Command command, CancellationToken cancellationToken)
 			{
-				foreach (var notification in command.Notifications)
-				{
-					await Task.Delay(500, cancellationToken);
+				await Task.Delay(500, cancellationToken);
 
-					_logger.LogInformation($"Id: {notification.NotificationId} Text: {notification.MessageText}");
+				_logger.LogInformation($"Id: {command.Notification.NotificationId} Text: {command.Notification.MessageText}");
 
-					await Task.Delay(2500, cancellationToken);
-				}
+				await Task.Delay(2500, cancellationToken);
 
 				return new CommandResult
 				{
-					NotificationIds = command.Notifications.Select(n => n.NotificationId).ToArray(),
+					NotificationId = command.Notification.NotificationId,
 					IsSuccess = true
 				};
 			}
